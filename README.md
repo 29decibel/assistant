@@ -116,7 +116,8 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
 4. Build
 
   ```bash
-  lein cljsbuild auto
+  lein cljsbuild clean
+  lein cljsbuild once
   ```
 
 5. Build standalone app
