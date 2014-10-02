@@ -127,6 +127,8 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
   ```
 
 ## TODO
+* Add a general card for errors(configuration checking)
+* Add `clear` command to clear all cards
 * markdown-card
 * Pipes (dispatcher can pass result/clojure data structure to next dispatcher)
 * Storage service support
