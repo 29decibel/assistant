@@ -1,0 +1,11 @@
+{
+  "name": "Assitant",
+  "main": "index.html",
+  "window": {
+    "toolbar": true,
+    "icon": "assistant.png",
+    "frame": true,
+    "width": 1154,
+    "height": 788
+  }
+}

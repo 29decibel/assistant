@@ -1,0 +1,7 @@
+{
+  :jira {:username "<USERNAME>" :password "<PASSWORD>" :endpoint "<API_HOST>"}
+  :timezone {:key "<API_KEY_OF_WORLDWEATHERONLINE.COM>"}
+  :map {:key "<GOOGLE_MAP_KEY>"}
+  :nytimes {:key "<NYTIMES_KEY>"}
+  :jenkins {:host "<JENKINS_HOST>" :token "<REMOTE_BUIULD_TOKEN>" :username "<USERNAME>" :password "<PASSWORD>"}
+}
