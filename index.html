@@ -1,39 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Assistant by 29decibel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <title>Assistant by 29decibel</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Assistant</h1>
-        <p class="header">simple, extensible and powerful personal assistant</p>
+    <header>
+      <div class="inner">
+        <h1>Assistant</h1>
+        <h2>simple, extensible and powerful personal assistant</h2>
+        <a href="https://github.com/29decibel/assistant" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/29decibel/assistant/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/29decibel/assistant/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/29decibel/assistant">View On GitHub</a></li>
-        </ul>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2>
+<a name="assistant" class="anchor" href="#assistant"><span class="octicon octicon-link"></span></a>Assistant</h2>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/29decibel">29decibel</a></p>
-
-
-      </header>
-      <section>
-        <h2>
-<a name="assitant" class="anchor" href="#assitant"><span class="octicon octicon-link"></span></a>Assitant</h2>
-
-<p>A super simple, extensible and powerful personal assitant, just like your shell, with the power of HTML.</p>
+<p>A super simple, extensible and powerful personal assistant, just like your shell, with the power of HTML.</p>
 
 <p><img src="https://asistant-assets.s3.amazonaws.com/short-intro-video.gif" alt="short-intro"></p>
 
@@ -97,6 +95,20 @@ Assistant will use the correspond card(a <a href="https://github.com/swannodette
 <div class="highlight highlight-clojure"><pre><span class="p">{</span> <span class="ss">:card</span> <span class="ss">:markdown-card</span>
   <span class="ss">:content</span> <span class="s">"## Markdown title \n Content area... \n ![image](http://someawesome-image.jpg)"</span>
 <span class="p">}</span>
+</pre></div>
+</li>
+</ul><h3>
+<a name="info-card" class="anchor" href="#info-card"><span class="octicon octicon-link"></span></a>info-card</h3>
+
+<p>Display <code>error</code>, <code>warn</code>, <code>info</code> or <code>success</code> information card to the user.</p>
+
+<ul>
+<li>
+<p>Data Structure:</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">{</span> <span class="ss">:card</span> <span class="ss">:info-card</span>
+  <span class="ss">:content</span> <span class="s">"Your config not correct, please add :jenkins :username in your ~/.assistant"</span><span class="p">}</span>
+  <span class="ss">:info-type</span> <span class="s">"error"</span> <span class="p">}</span>
 </pre></div>
 </li>
 </ul><h2>
@@ -164,17 +176,22 @@ If you want to provide customized CSS to your component, you can do that through
 </li>
 <li>
 <p>Register plugin namespace
-Go to <code>public/index.html</code> page, register your module namespace. Put something like this under <code>services</code>:</p>
+Add your plugin namespace name to <code>~/.assistant-plugins</code> file:</p>
 
-<div class="highlight highlight-javascript"><pre><span class="nx">goog</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">"your_plugin.namespace"</span><span class="p">);</span>
-</pre></div>
+<pre><code># here is a list of your awesome plugins you want to enabled
+# WARN: If your plugin used dash, then you need to convert it to underscore, since it's javascript
+#       assistant.plugins.your-awesome-plugin --&gt; assistant.plugins.your_awesome_plugin
+assistant.plugins.your_awesome_plugin
+</code></pre>
 </li>
 </ul>
+<p>Here is a source code of <a href="src/assistant/services/clojure-doc.cljs">example plugin for looking up Clojure doc</a>.</p>
 </li>
 <li>
 <p>Build</p>
 
-<div class="highlight highlight-bash"><pre>lein cljsbuild auto
+<div class="highlight highlight-bash"><pre>lein cljsbuild clean
+lein cljsbuild once
 </pre></div>
 </li>
 <li>
@@ -184,9 +201,62 @@ Go to <code>public/index.html</code> page, register your module namespace. Put s
 </pre></div>
 </li>
 </ol><h2>
+<a name="core-apis" class="anchor" href="#core-apis"><span class="octicon octicon-link"></span></a>Core APIs</h2>
+
+<ol>
+<li>
+<p><code>assistant.core/register-dispatcher</code></p>
+
+<blockquote>
+<p>Register your dispatcher/processor.</p>
+</blockquote>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-dispatcher</span> <span class="ss">:dribble</span> <span class="nv">dribbble-dispatcher</span> <span class="s">"dribble -- show popular designs from dribbble"</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p><code>assistant.core/register-card</code></p>
+
+<blockquote>
+<p>Register your custom card.</p>
+</blockquote>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-card</span> <span class="ss">:jira</span> <span class="nv">jira-card</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p><code>assistant.core/register-css</code></p>
+
+<blockquote>
+<p>Using <a href="https://github.com/noprompt/garden">noprompt/garden</a> to register your custom css for your card.</p>
+</blockquote>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-css</span> <span class="p">[</span><span class="ss">:.map</span>
+               <span class="p">[</span><span class="ss">:iframe</span> <span class="p">{</span><span class="ss">:width</span> <span class="s">"100%"</span> <span class="ss">:height</span> <span class="s">"400px"</span> <span class="ss">:border</span> <span class="s">"none"</span><span class="p">}]</span>
+               <span class="p">[</span><span class="ss">:img</span> <span class="p">{</span><span class="ss">:margin-top</span> <span class="s">"2px auto"</span><span class="p">}]])</span>
+</pre></div>
+</li>
+<li>
+<p><code>assistant.core/valid-config</code></p>
+
+<blockquote>
+<p>Check if given config exists. If not then show a error card.</p>
+</blockquote>
+
+<div class="highlight highlight-clojure"><pre><span class="c1">;; Here is a example how to check config informations</span>
+<span class="p">(</span><span class="kd">defn </span><span class="nv">check-jenkins-config</span> <span class="p">[]</span>
+  <span class="p">(</span><span class="nb">and </span><span class="p">(</span><span class="nf">valid-config</span> <span class="p">[</span><span class="ss">:jenkins</span> <span class="ss">:host</span><span class="p">]</span> <span class="s">"Please make sure following config exists in your ~/.assistant: :jenkins {:host}"</span><span class="p">)</span>
+       <span class="p">(</span><span class="nf">valid-config</span> <span class="p">[</span><span class="ss">:jenkins</span> <span class="ss">:token</span><span class="p">]</span> <span class="s">"Please make sure following config exists in your ~/.assistant: :jenkins {:token }"</span><span class="p">)</span>
+       <span class="p">(</span><span class="nf">valid-config</span> <span class="p">[</span><span class="ss">:jenkins</span> <span class="ss">:username</span><span class="p">]</span> <span class="s">"Please make sure following config exists in your ~/.assistant: :jenkins {:username}"</span><span class="p">)</span>
+       <span class="p">(</span><span class="nf">valid-config</span> <span class="p">[</span><span class="ss">:jenkins</span> <span class="ss">:password</span><span class="p">]</span> <span class="s">"Please make sure following config exists in your ~/.assistant: :jenkins {:password}"</span><span class="p">)))</span>
+</pre></div>
+</li>
+</ol><h2>
 <a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
 
 <ul>
+<li>Add a general card for errors(configuration checking)</li>
+<li>Add <code>clear</code> command to clear all cards</li>
 <li>markdown-card</li>
 <li>Pipes (dispatcher can pass result/clojure data structure to next dispatcher)</li>
 <li>Storage service support</li>
@@ -223,20 +293,34 @@ Go to <code>public/index.html</code> page, register your module namespace. Put s
 
 <ul>
 <li><a href="https://github.com/clojure/clojure">clojure/clojure</a></li>
+<li><a href="https://github.com/clojure/clojurescript">clojure/clojurescript</a></li>
 <li><a href="https://github.com/facebook/react">facebook/react</a></li>
 <li><a href="https://github.com/swannodette/om">swannodette/om</a></li>
-<li><a href="https://github.com/noprompt/garden">noprompt/garden</a></li>
 <li><a href="https://github.com/rogerwang/node-webkit">rogerwang/node-webkit</a></li>
 <li><a href="https://github.com/clojure/core.async">clojure/core.async</a></li>
 <li><a href="https://github.com/cognitect/transit-cljs">cognitect/transit-cljs</a></li>
+<li><a href="https://github.com/noprompt/garden">noprompt/garden</a></li>
 </ul><p><strong>Build with ♥ Clojure+Clojurescript.</strong></p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
-      </footer>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/29decibel/assistant/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/29decibel/assistant/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/29decibel/assistant"></a> is maintained by <a href="https://github.com/29decibel">29decibel</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
