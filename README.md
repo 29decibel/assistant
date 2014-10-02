@@ -1,5 +1,5 @@
 ## Assistant
-A super simple, extensible and powerful personal assitant, just like your shell, with the power of HTML.
+A super simple, extensible and powerful personal assistant, just like your shell, with the power of HTML.
 
 ![short-intro](https://asistant-assets.s3.amazonaws.com/short-intro-video.gif)
 

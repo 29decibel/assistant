@@ -20,7 +20,7 @@
   :source-paths ["src"]
 
   :node-webkit-build {:root "./public"
-                      :name "Assitant"
+                      :name "Assistant"
                       :osx {:icon "./public/images/icon.icns"}
                       :platforms #{:osx}
                       :disable-developer-toolbar true}
