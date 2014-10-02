@@ -169,6 +169,15 @@
   (update-styles))
 
 
+(defn valid-config [names msg & info-type]
+  "check if the config exist
+  example arguments: :jira :key"
+  (let [c (config)]
+    (if-not (get-in c names)
+      (not (go (>! dispatcher-chan {:type :info-card :content msg :info-type "error"}))) ;; this case should return true
+      true)))
+
+
 ;; built in help dispatcher and card
 (defn help-dispatcher [result-chan text]
   (go

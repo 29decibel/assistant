@@ -1,7 +1,7 @@
 (ns assistant.services.jenkins
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [assistant.common :as common]
-            [assistant.core :refer [register-card register-dispatcher register-css config]]
+            [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
             [hickory.core :as hk]
@@ -24,11 +24,18 @@
 (def password (-> (config) :jenkins :password))
 (def basic-auth {:basic-auth {:username username :password password}})
 
+(defn check-jenkins-config []
+  (and (valid-config [:jenkins :host] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
+       (valid-config [:jenkins :token] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
+       (valid-config [:jenkins :username] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
+       (valid-config [:jenkins :password] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")))
+
 (defn jenkins-dispatcher [result-chan text]
-  (go (let [response (<! (http/get (str host "/api/json") basic-auth))
-            m (:body response)
-            result (map #(assoc % :title (:name %)) (:jobs m))]
-        (>! result-chan {:type :jenkins-card :content result :input text}))))
+  (if (check-jenkins-config)
+    (go (let [response (<! (http/get (str host "/api/json") basic-auth))
+              m (:body response)
+              result (map #(assoc % :title (:name %)) (:jobs m))]
+          (>! result-chan {:type :jenkins-card :content result :input text})))))
 
 (def console-chan (chan))
 

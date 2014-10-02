@@ -52,6 +52,17 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
   }
   ```
 
+### info-card
+  Display `error`, `warn`, `info` or `success` information card to the user.
+
+  * Data Structure:
+
+  ```clojure
+  { :card :info-card
+    :content "Your config not correct, please add :jenkins :username in your ~/.assistant"}
+    :info-type "error" }
+  ```
+
 ## Write your plugin
 1. Write a processor
 
@@ -154,6 +165,18 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
     (register-css [:.map
                    [:iframe {:width "100%" :height "400px" :border "none"}]
                    [:img {:margin-top "2px auto"}]])
+    ```
+
+  4. `assistant.core/valid-config`
+    > Check if given config exists. If not then show a error card.
+
+    ```clojure
+    ;; Here is a example how to check config informations
+    (defn check-jenkins-config []
+      (and (valid-config [:jenkins :host] "Please make sure following config exists in your ~/.assistant: :jenkins {:host}")
+           (valid-config [:jenkins :token] "Please make sure following config exists in your ~/.assistant: :jenkins {:token }")
+           (valid-config [:jenkins :username] "Please make sure following config exists in your ~/.assistant: :jenkins {:username}")
+           (valid-config [:jenkins :password] "Please make sure following config exists in your ~/.assistant: :jenkins {:password}")))
     ```
 
 ## TODO
