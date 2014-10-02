@@ -154,11 +154,12 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
 
 ## Credits goes to
 * [clojure/clojure](https://github.com/clojure/clojure)
+* [clojure/clojurescript](https://github.com/clojure/clojurescript)
 * [facebook/react](https://github.com/facebook/react)
 * [swannodette/om](https://github.com/swannodette/om)
-* [noprompt/garden](https://github.com/noprompt/garden)
 * [rogerwang/node-webkit](https://github.com/rogerwang/node-webkit)
 * [clojure/core.async](https://github.com/clojure/core.async)
 * [cognitect/transit-cljs](https://github.com/cognitect/transit-cljs)
+* [noprompt/garden](https://github.com/noprompt/garden)
 
 __Build with ♥ Clojure+Clojurescript.__
