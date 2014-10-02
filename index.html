@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Assistant by 29decibel</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Assistant</h1>
+        <p class="header">simple, extensible and powerful personal assistant</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/29decibel/assistant/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/29decibel/assistant/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/29decibel/assistant">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/29decibel">29decibel</a></p>
+
+
+      </header>
+      <section>
+        <h2>
+<a name="assitant" class="anchor" href="#assitant"><span class="octicon octicon-link"></span></a>Assitant</h2>
+
+<p>A super simple, extensible and powerful personal assitant, just like your shell, with the power of HTML.</p>
+
+<p><img src="https://asistant-assets.s3.amazonaws.com/short-intro-video.gif" alt="short-intro"></p>
+
+<h2>
+<a name="what-is-that" class="anchor" href="#what-is-that"><span class="octicon octicon-link"></span></a>What is that?</h2>
+
+<p>Assistant is more like a <a href="https://github.com/github/hubot">hubot</a> with rich HTML interface(<a href="https://github.com/swannodette/om">Om</a> component), or like a Siri on your desktop.
+It consists of multiple dispatchers(processors) and cards.
+Dispatcher(processor) process the text commands, then put the result into the result channel.
+Assistant will use the correspond card(a <a href="https://github.com/swannodette/om">Om</a> component) to show the data.</p>
+
+<h3>
+<a name="here-is-a-simple-diagram-of-how-it-works" class="anchor" href="#here-is-a-simple-diagram-of-how-it-works"><span class="octicon octicon-link"></span></a>Here is a simple diagram of how it works</h3>
+
+<p><img src="https://asistant-assets.s3.amazonaws.com/assistant-structure.jpg" alt="assistant-structure"></p>
+
+<h2>
+<a name="build-in-cards" class="anchor" href="#build-in-cards"><span class="octicon octicon-link"></span></a>Build-in cards</h2>
+
+<h3>
+<a name="image-list-card" class="anchor" href="#image-list-card"><span class="octicon octicon-link"></span></a>image-list-card</h3>
+
+<p><img src="https://s3.amazonaws.com/asistant-assets/assistant-list-image-card.png" alt="image-list-card-hand-draw"></p>
+
+<ul>
+<li>
+<p>Data Structure:</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">{</span> <span class="ss">:card</span> <span class="ss">:image-list-card</span>
+  <span class="ss">:content</span> <span class="p">[</span>
+    <span class="p">{</span><span class="ss">:url</span> <span class="s">"http://example-url"</span> <span class="ss">:image</span> <span class="s">"http://some-image-url/a.jpg"</span> <span class="ss">:title</span> <span class="s">"Item title"</span><span class="p">}</span>
+    <span class="nv">...</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+</ul><h3>
+<a name="list-card" class="anchor" href="#list-card"><span class="octicon octicon-link"></span></a>list-card</h3>
+
+<p><img src="https://s3.amazonaws.com/asistant-assets/assistant-list-card.png" alt="list-card-hand-draw"></p>
+
+<ul>
+<li>
+<p>Data Structure:</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">{</span> <span class="ss">:card</span> <span class="ss">:list-card</span>
+  <span class="ss">:content</span> <span class="p">[</span>
+    <span class="p">{</span><span class="ss">:url</span> <span class="s">"http://example-url"</span> <span class="ss">:title</span> <span class="s">"Item title"</span><span class="p">}</span>
+    <span class="nv">...</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+</ul><h3>
+<a name="markdown-card" class="anchor" href="#markdown-card"><span class="octicon octicon-link"></span></a>markdown-card</h3>
+
+<ul>
+<li>
+<p>Data Structure:</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">{</span> <span class="ss">:card</span> <span class="ss">:markdown-card</span>
+  <span class="ss">:content</span> <span class="s">"## Markdown title \n Content area... \n ![image](http://someawesome-image.jpg)"</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+</ul><h2>
+<a name="write-your-plugin" class="anchor" href="#write-your-plugin"><span class="octicon octicon-link"></span></a>Write your plugin</h2>
+
+<ol>
+<li>
+<p>Write a processor</p>
+
+<p>A processor is just a function take a result channel and the text user typed in, then do what ever you want, at last
+put the result into the chanel.</p>
+
+<p>In this case, we make a request to Jira api, then put the JSON response into the channel and tell assistant to use jira card to
+render the result.</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="kd">defn </span><span class="nv">jira-dispatcher</span> <span class="p">[</span><span class="nv">result-chan</span> <span class="nv">text</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">go</span> <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">response</span> <span class="p">(</span><span class="nf">&lt;!</span> <span class="p">(</span><span class="nf">http/get</span> <span class="p">(</span><span class="nb">str </span><span class="nv">endpoint</span> <span class="s">"/rest/api/2/issue/"</span> <span class="nv">text</span><span class="p">)</span> <span class="p">{</span><span class="ss">:basic-auth</span> <span class="p">{</span><span class="ss">:username</span> <span class="nv">username</span> <span class="ss">:password</span> <span class="nv">password</span><span class="p">}}))</span>
+            <span class="nv">m</span> <span class="p">(</span><span class="ss">:body</span> <span class="nv">response</span><span class="p">)</span>
+            <span class="nv">error</span> <span class="p">(</span><span class="ss">:errorMessages</span> <span class="nv">m</span><span class="p">)</span>
+            <span class="nv">issue-key</span> <span class="p">(</span><span class="ss">:key</span> <span class="nv">m</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nb">when </span><span class="nv">issue-key</span>
+          <span class="p">(</span><span class="nf">&gt;!</span> <span class="nv">result-chan</span> <span class="p">{</span><span class="ss">:type</span> <span class="ss">:jira</span> <span class="ss">:content</span> <span class="nv">m</span> <span class="ss">:input</span> <span class="nv">text</span><span class="p">})))))</span>
+</pre></div>
+</li>
+<li>
+<p>Write a card</p>
+
+<p>You don't have to write a card to show the result of your stuff, we have some built in cards.
+But if those cards not what you want, then you can always easily wrap your own.
+Here is a simple card(Om component) of for Jira issue.</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="kd">defn </span><span class="nv">jira-view</span> <span class="p">[</span><span class="nv">data</span> <span class="nv">owner</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">reify</span>
+    <span class="nv">om/IRender</span>
+    <span class="p">(</span><span class="nf">render</span> <span class="p">[</span><span class="nv">_</span><span class="p">]</span>
+            <span class="p">(</span><span class="nf">dom/div</span> <span class="o">#</span><span class="nv">js</span> <span class="p">{</span><span class="ss">:className</span> <span class="s">"clearfix"</span><span class="p">}</span>
+                     <span class="p">(</span><span class="nf">common/link</span> <span class="p">(</span><span class="nb">str </span><span class="nv">endpoint</span> <span class="s">"/browse/"</span> <span class="p">(</span><span class="ss">:input</span> <span class="nv">data</span><span class="p">))</span> <span class="p">(</span><span class="nf">dom/h4</span> <span class="nv">nil</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">data</span> <span class="ss">:content</span> <span class="ss">:key</span><span class="p">)</span> <span class="s">"  "</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">data</span> <span class="ss">:content</span> <span class="ss">:fields</span> <span class="ss">:summary</span><span class="p">)))</span>
+                     <span class="p">(</span><span class="nf">dom/p</span> <span class="o">#</span><span class="nv">js</span> <span class="p">{</span><span class="ss">:dangerouslySetInnerHTML</span> <span class="o">#</span><span class="nv">js</span> <span class="p">{</span><span class="ss">:__html</span> <span class="p">(</span><span class="nf">clojure.string/replace</span> <span class="p">(</span><span class="nf">or</span>
+</pre></div>
+</li>
+<li>
+<p>Register</p>
+
+<ul>
+<li>
+<p>Register processor</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-card</span> <span class="ss">:jira</span> <span class="nv">jira-view</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p>Register card</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-dispatcher</span> <span class="ss">:jira</span> <span class="nv">jira-dispatcher</span> <span class="s">"jira [issue-number] -- find jira issue"</span><span class="p">)</span>
+</pre></div>
+</li>
+<li>
+<p>Register CSS(optional)
+If you want to provide customized CSS to your component, you can do that through <code>register-css</code>:</p>
+
+<div class="highlight highlight-clojure"><pre><span class="p">(</span><span class="nf">register-css</span> <span class="p">[</span><span class="ss">:.jenkins-card</span>
+               <span class="p">[</span><span class="ss">:code</span> <span class="p">{</span><span class="ss">:max-height</span> <span class="s">"30px"</span> <span class="ss">:height</span> <span class="s">"30px"</span> <span class="ss">:overflow</span> <span class="s">"auto"</span><span class="p">}]</span>
+               <span class="p">[</span><span class="ss">:a</span> <span class="p">{</span><span class="ss">:display</span> <span class="s">"inline-block"</span> <span class="ss">:min-width</span> <span class="s">"200px"</span><span class="p">}]])</span>
+</pre></div>
+</li>
+<li>
+<p>Register plugin namespace
+Go to <code>public/index.html</code> page, register your module namespace. Put something like this under <code>services</code>:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">goog</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">"your_plugin.namespace"</span><span class="p">);</span>
+</pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>Build</p>
+
+<div class="highlight highlight-bash"><pre>lein cljsbuild auto
+</pre></div>
+</li>
+<li>
+<p>Build standalone app</p>
+
+<div class="highlight highlight-bash"><pre>lein node-webkit-build
+</pre></div>
+</li>
+</ol><h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>markdown-card</li>
+<li>Pipes (dispatcher can pass result/clojure data structure to next dispatcher)</li>
+<li>Storage service support</li>
+<li>Check required parameters</li>
+<li>System services</li>
+<li><del>Generic cards(List Card, Image Card, Readable Article List Card, JSON Viewer Card)</del></li>
+<li><del>Auto save app state</del></li>
+<li><del>Command line like style</del></li>
+<li><del>Create dot file if not exists</del></li>
+</ul><h2>
+<a name="more-cards" class="anchor" href="#more-cards"><span class="octicon octicon-link"></span></a>More cards</h2>
+
+<ul>
+<li>Weather -- <a href="https://github.com/erikflowers/weather-icons">https://github.com/erikflowers/weather-icons</a>
+</li>
+<li>Movie Showtime -- <a href="https://developer.fandango.com/io-docs">https://developer.fandango.com/io-docs</a>
+</li>
+<li>Hotel price search -- <a href="http://developer.ean.com/docs/common/">http://developer.ean.com/docs/common/</a>
+</li>
+<li>Flight number look up</li>
+<li>Fantastical like Calendar</li>
+<li>Flight price search</li>
+<li><del>Dribble popular designs</del></li>
+<li><del>Jenkins</del></li>
+</ul><h2>
+<a name="inspired-by" class="anchor" href="#inspired-by"><span class="octicon octicon-link"></span></a>Inspired by</h2>
+
+<ul>
+<li><a href="https://github.com/github/hubot">github/hubot</a></li>
+<li><a href="https://github.com/bhauman/devcards">bhauman/devcards</a></li>
+<li><a href="http://www.imdb.com/title/tt1798709/">Her</a></li>
+</ul><h2>
+<a name="credits-goes-to" class="anchor" href="#credits-goes-to"><span class="octicon octicon-link"></span></a>Credits goes to</h2>
+
+<ul>
+<li><a href="https://github.com/clojure/clojure">clojure/clojure</a></li>
+<li><a href="https://github.com/facebook/react">facebook/react</a></li>
+<li><a href="https://github.com/swannodette/om">swannodette/om</a></li>
+<li><a href="https://github.com/noprompt/garden">noprompt/garden</a></li>
+<li><a href="https://github.com/rogerwang/node-webkit">rogerwang/node-webkit</a></li>
+<li><a href="https://github.com/clojure/core.async">clojure/core.async</a></li>
+<li><a href="https://github.com/cognitect/transit-cljs">cognitect/transit-cljs</a></li>
+</ul><p><strong>Build with ♥ Clojure+Clojurescript.</strong></p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-55361851-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
