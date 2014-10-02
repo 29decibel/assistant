@@ -108,10 +108,15 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
     ```
 
   * Register plugin namespace
-    Go to ```public/index.html``` page, register your module namespace. Put something like this under `services`:
-    ```javascript
-    goog.require("your_plugin.namespace");
+    Add your plugin namespace name to `~/.assistant-plugins` file:
     ```
+    # here is a list of your awesome plugins you want to enabled
+    # WARN: If your plugin used dash, then you need to convert it to underscore, since it's javascript
+    #       assistant.plugins.your-awesome-plugin --> assistant.plugins.your_awesome_plugin
+    assistant.plugins.your_awesome_plugin
+    ```
+
+  Here is a source code of [example plugin for looking up Clojure doc](src/assistant/services/clojure-doc.cljs).
 
 4. Build
 
@@ -125,6 +130,31 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
   ```bash
   lein node-webkit-build
   ```
+
+## Core APIs
+
+  1. `assistant.core/register-dispatcher`
+    > Register your dispatcher/processor.
+
+    ```clojure
+    (register-dispatcher :dribble dribbble-dispatcher "dribble -- show popular designs from dribbble")
+    ```
+
+  2. `assistant.core/register-card`
+    > Register your custom card.
+
+    ```clojure
+    (register-card :jira jira-card)
+    ```
+
+  3. `assistant.core/register-css`
+    > Using [noprompt/garden](https://github.com/noprompt/garden) to register your custom css for your card.
+
+    ```clojure
+    (register-css [:.map
+                   [:iframe {:width "100%" :height "400px" :border "none"}]
+                   [:img {:margin-top "2px auto"}]])
+    ```
 
 ## TODO
 * Add a general card for errors(configuration checking)

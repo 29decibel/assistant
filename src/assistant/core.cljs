@@ -11,6 +11,8 @@
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
+;; a list of plugins installed by default
+;; user can alwasy disalbe them in the ~/.assistant-plugins
 
 (defn log [m]
   (.log js/console m))

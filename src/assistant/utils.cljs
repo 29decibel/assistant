@@ -28,9 +28,17 @@
   (if-not (.existsSync fs file-name)
     (.writeFileSync fs file-name "" "utf-8")))
 
-
 (defn write-to-file [file-name content]
   (.writeFileSync fs file-name content "utf-8"))
 
+(defn get-namespace-name [content]
+  "get the namespace name from given conten string"
+  (last (.match content #"ns (.*) ")))
+
+
+(defn available-plugins []
+  (let [dir (str js/__dir__ "./src/assistant/services")
+        files (.readdirSync fs dir)]
+    (print files)))
 
 
