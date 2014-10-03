@@ -15,7 +15,7 @@
                  [om "0.7.0"]]
 
   :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
-            [lein-node-webkit-build "0.1.0"]]
+            [lein-node-webkit-build "0.1.2"]]
 
   :source-paths ["src"]
 
