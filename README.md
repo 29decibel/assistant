@@ -12,6 +12,8 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
 ## How to use?
 Make sure you have [Leiningen](http://leiningen.org/) installed, if not, you can use `brew install leiningen` to install.
 
+> WARN: Someone has issues with the older version of `leiningen`, so please upgrade it to `2.5.3`(or at least `>=2.4.3`) first if you are using an older version of `leiningen`.
+
 ```bash
 git clone git@github.com:29decibel/assistant.git && cd assistant
 lein cljsbuild once && lein node-webkit-build
