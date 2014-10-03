@@ -9,6 +9,17 @@ It consists of multiple dispatchers(processors) and cards.
 Dispatcher(processor) process the text commands, then put the result into the result channel.
 Assistant will use the correspond card(a [Om](https://github.com/swannodette/om) component) to show the data.
 
+## How to use?
+Make sure you have [Leiningen](http://leiningen.org/) installed, if not, you can use `brew install leiningen` to install.
+
+```bash
+git clone git@github.com:29decibel/assistant.git && cd assistant
+lein cljsbuild once && lein node-webkit-build
+```
+
+After that, you will find a stand alone app in the `release` folder. Right now it only build the app for Mac. Will support Linux and Windows later on.
+Make sure you have proper configuration in your `~/.assistant` for specific commands, you can find a example config file [here](dot_assistant_example).
+
 ### Here is a simple diagram of how it works
 ![assistant-structure](https://asistant-assets.s3.amazonaws.com/assistant-structure.jpg)
 
