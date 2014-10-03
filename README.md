@@ -113,12 +113,12 @@ Make sure you have proper configuration in your `~/.assistant` for specific comm
 
   * Register processor
     ```clojure
-    (register-card :jira jira-view)
+    (register-dispatcher :jira jira-dispatcher "jira [issue-number] -- find jira issue")
     ```
 
   * Register card
     ```clojure
-    (register-dispatcher :jira jira-dispatcher "jira [issue-number] -- find jira issue")
+    (register-card :jira jira-view)
     ```
 
   * Register CSS(optional)
