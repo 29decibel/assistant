@@ -199,6 +199,13 @@
 (register-dispatcher :help help-dispatcher "help -- show the list of available commands")
 (register-card :help help-card)
 
+
+(defn clear-dispatcher [result-chan text]
+  "Built in dispatcher to clear all cards"
+  (reset! app-state {:cards []}))
+
+(register-dispatcher :clear clear-dispatcher "clear -- clear all cards.")
+
 (defn refresh-app-state! []
   (reset! app-state (read-app-state)))
 
