@@ -1,7 +1,7 @@
 (ns assistant.services.jira
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [assistant.common :as common]
-            [assistant.core :refer [register-card register-dispatcher register-css config]]
+            [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<! >! chan]]
             [hickory.core :as hk]
@@ -13,15 +13,24 @@
 (def username (-> (config) :jira :username))
 (def password (-> (config) :jira :password))
 
-(defn jira-dispatcher [result-chan text]
-  (go (let [response (<! (http/get (str endpoint "/rest/api/2/issue/" text) {:basic-auth {:username username :password password}}))
-            m (:body response)
-            error (:errorMessages m)
-            issue-key (:key m)]
-        (print m)
-        (when issue-key
-          (>! result-chan {:type :jira :content m :input text})))))
+(def config-err-msg "Please make sure you have following configs in ~/.assistant file. {:jira {:endpoint '...' :username: '...' :password: '...'}}.")
 
+
+(defn check-jira-config []
+  (and (valid-config [:jira :endpoint] config-err-msg)
+       (valid-config [:jira :username] config-err-msg)
+       (valid-config [:jira :password] config-err-msg)))
+
+
+(defn jira-dispatcher [result-chan text]
+  (if (check-jira-config)
+    (go (let [response (<! (http/get (str endpoint "/rest/api/2/issue/" text) {:basic-auth {:username username :password password}}))
+              m (:body response)
+              error (:errorMessages m)
+              issue-key (:key m)]
+          (print m)
+          (when issue-key
+            (>! result-chan {:type :jira :content m :input text}))))))
 
 (defn jira-view [data owner]
   (reify

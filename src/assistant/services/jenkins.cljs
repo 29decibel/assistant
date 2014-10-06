@@ -24,11 +24,13 @@
 (def password (-> (config) :jenkins :password))
 (def basic-auth {:basic-auth {:username username :password password}})
 
+(def config-err-msg "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password :token}")
+
 (defn check-jenkins-config []
-  (and (valid-config [:jenkins :host] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
-       (valid-config [:jenkins :token] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
-       (valid-config [:jenkins :username] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")
-       (valid-config [:jenkins :password] "Please make sure following config exists in your ~/.assistant: :jenkins {:host :username :password }")))
+  (and (valid-config [:jenkins :host] config-err-msg)
+       (valid-config [:jenkins :token] config-err-msg)
+       (valid-config [:jenkins :username] config-err-msg)
+       (valid-config [:jenkins :password] config-err-msg)))
 
 (defn jenkins-dispatcher [result-chan text]
   (if (check-jenkins-config)

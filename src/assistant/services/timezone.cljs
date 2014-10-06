@@ -1,7 +1,7 @@
 (ns assistant.services.timezone
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
-            [assistant.core :refer [register-card register-dispatcher register-css config]]
+            [assistant.core :refer [register-card register-dispatcher register-css config valid-config]]
             [cljs.core.async :refer [<! >! chan]]
             [hickory.core :as hk]
             [hickory.select :as s]
@@ -11,13 +11,18 @@
 (def api-key (-> (config)
                  :timezone :key))
 
-(defn time-dispatcher [result-chan text]
-  (go (let [url (str "http://api.worldweatheronline.com/free/v1/tz.ashx?q=" text "&format=json&key=" api-key)
-            response (<! (http/get url {:with-credentials? false}))
-            body (:body response)]
-        (when-not (-> body :data :error)
-          (>! result-chan {:type :timezone :content body :input text})))))
+(def config-err-msg "This command needs a API key from http://api.worldweatheronline.com.
+                    You can apply one for free on their website. Then put the key at ~/.assistant as following:
+                    {:timezone {:key '...'}}")
 
+
+(defn time-dispatcher [result-chan text]
+  (if (valid-config [:timezone :key] config-err-msg)
+    (go (let [url (str "http://api.worldweatheronline.com/free/v1/tz.ashx?q=" text "&format=json&key=" api-key)
+              response (<! (http/get url {:with-credentials? false}))
+              body (:body response)]
+          (when-not (-> body :data :error)
+            (>! result-chan {:type :timezone :content body :input text}))))))
 
 
 (defn timezone-card [data owner]

@@ -12,7 +12,10 @@ Assistant will use the correspond card(a [Om](https://github.com/swannodette/om)
 ## How to use?
 Make sure you have [Leiningen](http://leiningen.org/) installed, if not, you can use `brew install leiningen` to install.
 
-> WARN: Someone has issues with the older version of `leiningen`, so please upgrade it to `2.5.3`(or at least `>=2.4.3`) first if you are using an older version of `leiningen`.
+> WARN:
+  1. Someone has issues with the older version of `leiningen`, so please upgrade it to `2.5.3`(or at least `>=2.4.3`) first if you are using an older version of `leiningen`.
+  2. Many of services needs api key to work, since they are making requests to those services. Now most of the services will complain about no aip keys found in `~/.assistant`, luckly it will also tell you where to get one, for free :-)
+
 
 ```bash
 git clone git@github.com:29decibel/assistant.git && cd assistant
@@ -214,6 +217,35 @@ Make sure you have proper configuration in your `~/.assistant` for specific comm
 * Flight price search
 * ~~Dribble popular designs~~
 * ~~Jenkins~~
+
+## FAQ
+1. Why this exists?
+I am not trying to build a new shell, or revolutionize shell interface. I am also not trying to build a Alfred alternative. Since, I think, it's all start from different places to solve
+different problems. Shell is great, lightweight and highly composable(due to the abstraction of texts) through pipes. Alfred is more like a luncher, though nowadays it
+includes quite flexible work-flows, but it's interface still constrained by lists.
+
+The idea behind Assistant is try to use minimal concepts, elements(processor + card) to solve problems, but also at the same time make it highly
+extensible. I am trying to build a simple mind model `text --> process --> result(JSON/map/array) -> card`. Before [ReactJS](https://github.com/29decibel/assistant) exists, card parts is always become a mess.
+Either it will be very hard to control the modularity or it has too much hassle or mentally feel complicated. But since ReactJS's component is just like a card.
+Itself accepts data, then return virtual DOM elements, that's it, no more, no less. Finally I feel relieved. :-)
+
+Om push it into a higher level, so you can write even less code, avoid struggling another new JSX format. Have to say writing UI in Om is the first time I feel fun.
+
+
+2. Why there are two places for plugins? Where should I put my plugins?
+The initial idea is to have a bunch of built in services, they are all lived in [src/assistant/services](src/assistant/services). It's also part of the git repo.
+But if you have any personal plugins want to use, you can create `cljs` file in [plugins](plugins) folder. Leinbuild will also pick it up.
+
+Later on I plan to use some similar plugin installation system like [Lighttable](https://github.com/LightTable/LightTable). But it needs some time.
+
+
+3. Why it shows a blank card?
+Sorry for that if you ever saw it, that's probably because you don't have certain API keys for some services. So the result is empty, also if the card doesn't check the result
+properly it might render a empty card. I've added a new function `valid-config` and a built in `info-card`. So before the processor runs, it will check if the config exists, if not, it will
+put a error result into the channel, then the `info-card` will render and show the message.
+
+I will try to make this config check process much simpler later on.
+Also I am very open to ideas on how to improve this tool to make it more useful.
 
 
 ## Inspired by
