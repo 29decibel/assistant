@@ -10,12 +10,12 @@
             [om.dom :as dom :include-macros true]))
 
 
-(defn info-card [{:keys [content info-type]} owner]
+(defn info-card [{:keys [content info-type title]} owner]
   "info-card is a generate card to display info, warn or error messages to user"
   (reify
     om/IRender
     (render [this]
-      (dom/div #js {:className info-type } (dom/h2 nil (.toUpperCase info-type))
+      (dom/div #js {:className info-type } (dom/h4 nil (or title (.toUpperCase info-type)))
                content))))
 
 (register-card :info-card info-card)

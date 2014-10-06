@@ -1,5 +1,5 @@
 (ns assistant.app
-  (:require [assistant.core :refer [refresh-app-state!]]
+  (:require [assistant.core :refer [refresh-app-state! put-result]]
             [assistant.utils :as utils]))
 
 (def fs (js/require "fs"))
@@ -22,6 +22,12 @@
                      (filter (complement empty-string)))]
     (doseq [p plugins]
       (.require js/goog p))))
+
+
+;; register global uncaught exceptions
+(.on js/process "uncaughtException"
+     (fn [e]
+       (put-result {:type :info-card :title "Uncaught Exception:" :content (.-message e) :info-type "error"})))
 
 (print "Loading third part plugins from ~/.assistant-plugins...")
 (load-plugins)

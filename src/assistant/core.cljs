@@ -67,6 +67,10 @@
 (def dispatcher-chan (chan))
 
 
+(defn put-result [result]
+  "Put a result into channel"
+  (go (>! dispatcher-chan result)))
+
 (let [win (.get (.-Window gui))
       w (t/writer :json)]
   (.on win "close" #(this-as me (do
@@ -174,7 +178,7 @@
   example arguments: :jira :key"
   (let [c (config)]
     (if-not (get-in c names)
-      (not (go (>! dispatcher-chan {:type :info-card :content msg :info-type "error"}))) ;; this case should return true
+      (not (go (>! dispatcher-chan {:type :info-card :content msg :info-type "error" :title "Configuration value[s] missing in ~/.assistant"}))) ;; this case should return true
       true)))
 
 
