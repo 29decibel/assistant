@@ -97,8 +97,11 @@
         command-name (keyword (first parts))
         query (clojure.string/join " "(rest parts))
         dispatcher (get-in @dispatchers [command-name :exec])]
-    (when dispatcher
-      (dispatcher result-chan query))))
+    (if dispatcher
+      ;; using correspond dispatcher/processor to process the text
+      (dispatcher result-chan query)
+      ;; not found dispatcher, show a warn card
+      (put-result {:type :info-card :info-type "warn" :title (str "Unknown Command - " text) :content "You can run command 'help' to get all available commands."}))))
 
 (defn empty-card []
   (dom/div #js {:className "empty-card"} "Design is not just what it looks like and feels like. Design is how it works. -- Steve Jobs"))
