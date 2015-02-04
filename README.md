@@ -1,4 +1,6 @@
 ## Assistant
+
+[![Join the chat at https://gitter.im/29decibel/assistant](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/29decibel/assistant?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A super simple, extensible and powerful personal assistant, just like your shell, with the power of HTML.
 
 ![short-intro](https://asistant-assets.s3.amazonaws.com/short-intro-video.gif)
