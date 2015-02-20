@@ -12,15 +12,16 @@
                  [garden "1.2.1"]
                  [prismatic/dommy "0.1.3"]
                  [hickory "0.5.4"]
-                 [om "0.7.0"]]
+                 [org.omcljs/om "0.8.8"]]
 
-  :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
-            [lein-node-webkit-build "0.1.2"]]
+  :plugins [[lein-cljsbuild "1.0.6-SNAPSHOT"]
+            [lein-node-webkit-build "0.1.6"]]
 
   :source-paths ["src"]
 
   :node-webkit-build {:root "./public"
                       :name "Assistant"
+                      :nw-version "0.11.6"
                       :osx {:icon "./public/images/icon.icns"}
                       :platforms #{:osx}
                       :disable-developer-toolbar true}
