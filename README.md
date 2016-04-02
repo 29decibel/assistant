@@ -263,4 +263,7 @@ Make sure you have proper configuration in your `~/.assistant` for specific comm
 * [cognitect/transit-cljs](https://github.com/cognitect/transit-cljs)
 * [noprompt/garden](https://github.com/noprompt/garden)
 
+## Donation
+Buy me a [Kindle book](https://amzn.com/w/27RM84VK3GHRL) :book:
+
 __Build with ♥ Clojure+Clojurescript.__
