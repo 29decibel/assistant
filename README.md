@@ -1,7 +1,7 @@
 ## Assistant
 A super simple, extensible and powerful personal assistant, just like your shell, with the power of HTML.
 
-![short-intro](https://asistant-assets.s3.amazonaws.com/short-intro-video.gif)
+![short-intro](assets/short-intro-video.gif)
 
 ## What is that?
 Assistant is more like a [hubot](https://github.com/github/hubot) with rich HTML interface([Om](https://github.com/swannodette/om) component), or like a Siri on your desktop.
@@ -26,12 +26,12 @@ After that, you will find a stand alone app in the `release` folder. Right now i
 Make sure you have proper configuration in your `~/.assistant` for specific commands, you can find a example config file [here](dot_assistant_example).
 
 ### Here is a simple diagram of how it works
-![assistant-structure](https://asistant-assets.s3.amazonaws.com/assistant-structure.jpg)
+![assistant-structure](assets/assistant-structure.jpg)
 
 ## Build-in cards
 
 ### image-list-card
-  ![image-list-card-hand-draw](https://s3.amazonaws.com/asistant-assets/assistant-list-image-card.png)
+  ![image-list-card-hand-draw](assets/assistant-list-image-card.png)
 
   * Data Structure:
 
@@ -45,7 +45,7 @@ Make sure you have proper configuration in your `~/.assistant` for specific comm
   ```
 
 ### list-card
-  ![list-card-hand-draw](https://s3.amazonaws.com/asistant-assets/assistant-list-card.png)
+  ![list-card-hand-draw](assets/assistant-list-card.png)
 
   * Data Structure:
 
